@@ -1,0 +1,85 @@
+{
+	"name": "Dataflow7",
+	"properties": {
+		"type": "MappingDataFlow",
+		"typeProperties": {
+			"sources": [
+				{
+					"dataset": {
+						"referenceName": "DelimitedText7",
+						"type": "DatasetReference"
+					},
+					"name": "source1"
+				},
+				{
+					"dataset": {
+						"referenceName": "DelimitedText7",
+						"type": "DatasetReference"
+					},
+					"name": "source2"
+				}
+			],
+			"sinks": [],
+			"transformations": [
+				{
+					"name": "pivot1"
+				},
+				{
+					"name": "select1"
+				},
+				{
+					"name": "MapDrifted1",
+					"description": "Creates an explicit mapping for each drifted column"
+				},
+				{
+					"name": "pivot2"
+				},
+				{
+					"name": "select2"
+				}
+			],
+			"scriptLines": [
+				"source(output(",
+				"          {Student Number} as short,",
+				"          Subject as string,",
+				"          Marks as short",
+				"     ),",
+				"     allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     ignoreNoFilesFound: false) ~> source1",
+				"source(output(",
+				"          {Student Number} as short,",
+				"          Subject as string,",
+				"          Marks as short",
+				"     ),",
+				"     allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     ignoreNoFilesFound: false) ~> source2",
+				"source1 pivot(groupBy({Student Number}),",
+				"     pivotBy(Subject),",
+				"     {} = sum(Marks),",
+				"     columnNaming: '$N$V',",
+				"     lateral: true) ~> pivot1",
+				"MapDrifted1 select(mapColumn(",
+				"          {Student Number}",
+				"     ),",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true) ~> select1",
+				"pivot1 derive(Mathematics = toLong(byName('Mathematics')),",
+				"          Physics = toLong(byName('Physics'))) ~> MapDrifted1",
+				"source2 pivot(groupBy({Student Number}),",
+				"     pivotBy(Subject),",
+				"     {} = sum(Marks),",
+				"     columnNaming: '$N$V',",
+				"     lateral: true) ~> pivot2",
+				"pivot2 select(mapColumn(",
+				"          {Student Number},",
+				"          Mathematics,",
+				"          Physics",
+				"     ),",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true) ~> select2"
+			]
+		}
+	}
+}
