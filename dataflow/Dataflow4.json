@@ -1,0 +1,46 @@
+{
+	"name": "Dataflow4",
+	"properties": {
+		"type": "MappingDataFlow",
+		"typeProperties": {
+			"sources": [
+				{
+					"dataset": {
+						"referenceName": "DelimitedText6",
+						"type": "DatasetReference"
+					},
+					"name": "source1"
+				}
+			],
+			"sinks": [],
+			"transformations": [
+				{
+					"name": "window1"
+				},
+				{
+					"name": "filter1"
+				}
+			],
+			"scriptLines": [
+				"source(output(",
+				"          Department as string,",
+				"          {Department Name} as string",
+				"     ),",
+				"     allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     ignoreNoFilesFound: false) ~> source1",
+				"source1 window(over(Department,",
+				"          {Department Name}),",
+				"     asc(Department, true),",
+				"     asc({Department Name}, true),",
+				"     {Department Row Number Value} = rowNumber(),",
+				"          {Department Name Row Number Value} = rowNumber(),",
+				"          {Department Rank Value} = rank(),",
+				"          {Department Name Rank Value} = rank(),",
+				"          {Department Dense Rank Value} = denseRank(),",
+				"          {Department Name Dense Rank Value} = denseRank()) ~> window1",
+				"window1 filter({Department Row Number Value} == 1) ~> filter1"
+			]
+		}
+	}
+}
