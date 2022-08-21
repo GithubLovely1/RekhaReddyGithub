@@ -59,7 +59,7 @@
 				"     ignoreNoFilesFound: false) ~> source3",
 				"source1, source2 union(byName: true)~> union1",
 				"union1, source3 join(ID == source3@{S.No},",
-				"     joinType:'outer',",
+				"     joinType:'inner',",
 				"     matchType:'exact',",
 				"     ignoreSpaces: false,",
 				"     broadcast: 'auto')~> join1"
