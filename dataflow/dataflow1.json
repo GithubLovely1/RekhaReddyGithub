@@ -1,0 +1,76 @@
+{
+	"name": "dataflow1",
+	"properties": {
+		"type": "MappingDataFlow",
+		"typeProperties": {
+			"sources": [
+				{
+					"dataset": {
+						"referenceName": "Excel1",
+						"type": "DatasetReference"
+					},
+					"name": "source1"
+				}
+			],
+			"sinks": [],
+			"transformations": [
+				{
+					"name": "select1"
+				},
+				{
+					"name": "sort1"
+				},
+				{
+					"name": "filter1"
+				},
+				{
+					"name": "derivedColumn1"
+				}
+			],
+			"scriptLines": [
+				"source(output(",
+				"          Segment as string,",
+				"          Country as string,",
+				"          Product as string,",
+				"          {Discount Band} as string,",
+				"          {Units Sold} as double,",
+				"          {Manufacturing Price} as short,",
+				"          {Sale Price} as short,",
+				"          {Gross Sales} as double,",
+				"          Discounts as double,",
+				"          { Sales} as double,",
+				"          COGS as double,",
+				"          Profit as double,",
+				"          Date as date,",
+				"          {Month Number} as short,",
+				"          {Month Name} as string,",
+				"          Year as short",
+				"     ),",
+				"     allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     ignoreNoFilesFound: false) ~> source1",
+				"source1 select(mapColumn(",
+				"          Segment,",
+				"          Country,",
+				"          Product,",
+				"          {Discount Band},",
+				"          {Units Sold},",
+				"          {Manufacturing Price},",
+				"          {Sale Price},",
+				"          {Gross Sales},",
+				"          Discounts,",
+				"          { Sales},",
+				"          Date,",
+				"          {Month Number},",
+				"          {Month Name},",
+				"          Year",
+				"     ),",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true) ~> select1",
+				"select1 sort(desc(Country, true)) ~> sort1",
+				"sort1 filter(Year > 2013) ~> filter1",
+				"filter1 derive({Add/Sum} = add({Units Sold}, {Sale Price})) ~> derivedColumn1"
+			]
+		}
+	}
+}
