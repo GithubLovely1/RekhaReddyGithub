@@ -1,0 +1,41 @@
+{
+	"name": "dataflow5",
+	"properties": {
+		"type": "MappingDataFlow",
+		"typeProperties": {
+			"sources": [
+				{
+					"dataset": {
+						"referenceName": "DelimitedText6",
+						"type": "DatasetReference"
+					},
+					"name": "source1"
+				}
+			],
+			"sinks": [],
+			"transformations": [
+				{
+					"name": "window1"
+				},
+				{
+					"name": "filter1"
+				}
+			],
+			"scriptLines": [
+				"source(output(",
+				"          {Student Number} as short,",
+				"          Subject as string,",
+				"          Marks as short",
+				"     ),",
+				"     allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     inferDriftedColumnTypes: true,",
+				"     ignoreNoFilesFound: false) ~> source1",
+				"source1 window(desc(Marks, true),",
+				"     {Dense Rank Marks Value} = denseRank(),",
+				"          {Subject Rank Value} = rank()) ~> window1",
+				"window1 filter({Dense Rank Marks Value} == 1) ~> filter1"
+			]
+		}
+	}
+}
