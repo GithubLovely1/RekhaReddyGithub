@@ -1,0 +1,21 @@
+{
+	"name": "pipeline6",
+	"properties": {
+		"activities": [
+			{
+				"name": "WebHook1",
+				"type": "WebHook",
+				"dependsOn": [],
+				"userProperties": [],
+				"typeProperties": {
+					"url": "https://99e3ac9b-e68c-4c50-a1df-86418e052821.webhook.eus.azure-automation.net/webhooks?token=HMLy6RVl4dI7RNjcf9lfMkW6dcYCOjMTmvsb7Kd7Pz0%3d",
+					"method": "POST",
+					"timeout": "00:10:00"
+				}
+			}
+		],
+		"annotations": [],
+		"lastPublishTime": "2022-08-17T12:45:02Z"
+	},
+	"type": "Microsoft.DataFactory/factories/pipelines"
+}

@@ -1,0 +1,27 @@
+{
+	"name": "pipeline4",
+	"properties": {
+		"activities": [
+			{
+				"name": "Web1",
+				"type": "WebActivity",
+				"dependsOn": [],
+				"policy": {
+					"timeout": "7.00:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"url": "https://prod-05.centralus.logic.azure.com:443/workflows/f3a4b27bf94a424b8241f41fac7b9ed1/triggers/manual/paths/invoke?api-version=2016-10-01&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=7kgneATu2f1mkj7y1R0V3rNkMOBCMR0a-EC3T7ITVxg",
+					"method": "POST"
+				}
+			}
+		],
+		"annotations": [],
+		"lastPublishTime": "2022-08-15T14:48:29Z"
+	},
+	"type": "Microsoft.DataFactory/factories/pipelines"
+}

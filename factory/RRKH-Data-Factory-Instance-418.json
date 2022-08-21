@@ -1,0 +1,9 @@
+{
+	"name": "RRKH-Data-Factory-Instance-418",
+	"location": "eastus",
+	"identity": {
+		"type": "SystemAssigned",
+		"principalId": "f0ac60e0-793e-4e95-9faf-eaadd8a4cfbf",
+		"tenantId": "7905e7e1-6af7-48b9-a8dd-e05c1aea6383"
+	}
+}
