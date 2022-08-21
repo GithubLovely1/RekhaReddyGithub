@@ -6,22 +6,58 @@
 			"sources": [
 				{
 					"dataset": {
-						"referenceName": "DelimitedText1",
+						"referenceName": "DelimitedText2",
 						"type": "DatasetReference"
 					},
 					"name": "source1"
+				},
+				{
+					"dataset": {
+						"referenceName": "DelimitedText1",
+						"type": "DatasetReference"
+					},
+					"name": "source2"
 				}
 			],
 			"sinks": [],
-			"transformations": [],
+			"transformations": [
+				{
+					"name": "cast1"
+				},
+				{
+					"name": "lookup1"
+				},
+				{
+					"name": "split1"
+				}
+			],
 			"scriptLines": [
+				"source(output(",
+				"          {S.No} as string,",
+				"          Flowers as string",
+				"     ),",
+				"     allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     ignoreNoFilesFound: false) ~> source1",
 				"source(output(",
 				"          {S.No} as string,",
 				"          Empire as string",
 				"     ),",
 				"     allowSchemaDrift: true,",
 				"     validateSchema: false,",
-				"     ignoreNoFilesFound: false) ~> source1"
+				"     ignoreNoFilesFound: false) ~> source2",
+				"source1 cast(output(",
+				"          Flowers as string",
+				"     ),",
+				"     errors: true) ~> cast1",
+				"cast1, source2 lookup(Flowers == source2@{S.No},",
+				"     multiple: false,",
+				"     pickup: 'first',",
+				"     asc(Empire, true),",
+				"     broadcast: 'auto')~> lookup1",
+				"lookup1 split(Flowers == 'Lily',",
+				"     Empire == 'Mughal',",
+				"     disjoint: true) ~> split1@(Lily, Mughal, Default)"
 			]
 		}
 	}
